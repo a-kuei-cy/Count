@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>計數器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .title-input {
+            font-size: 28px;
+            font-weight: 600;
+            color: #667eea;
+            border: none;
+            background: transparent;
+            text-align: center;
+            width: 100%;
+            margin-bottom: 10px;
+            outline: none;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .title-input:focus {
+            border-bottom-color: #667eea;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+
+        .counter-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 80px;
+            font-weight: bold;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            min-height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .counter-display:hover {
+            transform: scale(1.02);
+        }
+
+        .counter-input {
+            font-size: 80px;
+            font-weight: bold;
+            color: white;
+            background: transparent;
+            border: none;
+            text-align: center;
+            width: 100%;
+            outline: none;
+        }
+
+        .counter-input::selection {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 20px;
+            font-size: 40px;
+            font-weight: bold;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-minus {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-minus:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-minus:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-plus {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .btn-plus:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-plus:active {
+            transform: translateY(-1px);
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #667eea;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .info {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 15px;
+            color: #666;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .pulse {
+            animation: pulse 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="text" class="title-input" id="titleInput" value="計數器" maxlength="30">
+        <div class="subtitle">可編輯標題和數字</div>
+        
+        <div class="counter-display" id="counterDisplay">
+            <input type="number" class="counter-input" id="counterInput" value="0">
+        </div>
+        
+        <div class="buttons">
+            <button class="btn-minus" onclick="decrease()">−</button>
+            <button class="btn-plus" onclick="increase()">＋</button>
+        </div>
+        
+        <button class="reset-btn" onclick="reset()">重置計數器</button>
+        
+        <div class="info">
+            💡 <strong>使用說明：</strong><br>
+            • 點擊 ＋ 按鈕增加，− 按鈕減少<br>
+            • 使用鍵盤：＋、空白鍵增加，− 鍵減少<br>
+            • 數字範圍：-99999 至 999999<br>
+            • 標題和數字可直接點擊編輯<br>
+            • 數據自動保存在瀏覽器中
+        </div>
+    </div>
+
+    <script>
+        let counter = 0;
+        const counterInput = document.getElementById('counterInput');
+        const counterDisplay = document.getElementById('counterDisplay');
+        const titleInput = document.getElementById('titleInput');
+
+        // 從瀏覽器載入保存的數據
+        function loadData() {
+            const savedCounter = parseInt(localStorage.getItem('counter')) || 0;
+            const savedTitle = localStorage.getItem('counterTitle') || '計數器';
+            counter = savedCounter;
+            counterInput.value = counter;
+            titleInput.value = savedTitle;
+        }
+
+        // 保存數據到瀏覽器
+        function saveData() {
+            localStorage.setItem('counter', counter);
+            localStorage.setItem('counterTitle', titleInput.value);
+        }
+
+        function increase() {
+            if (counter < 999999) {
+                counter++;
+                updateDisplay();
+                addPulse();
+            }
+        }
+
+        function decrease() {
+            if (counter > -99999) {
+                counter--;
+                updateDisplay();
+                addPulse();
+            }
+        }
+
+        function reset() {
+            counter = 0;
+            updateDisplay();
+            addPulse();
+        }
+
+        function updateDisplay() {
+            counterInput.value = counter;
+            saveData();
+        }
+
+        function addPulse() {
+            counterDisplay.classList.add('pulse');
+            setTimeout(() => {
+                counterDisplay.classList.remove('pulse');
+            }, 300);
+        }
+
+        // 鍵盤事件
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '+' || e.key === ' ') {
+                e.preventDefault();
+                increase();
+            } else if (e.key === '-') {
+                e.preventDefault();
+                decrease();
+            }
+        });
+
+        // 手動輸入數字
+        counterInput.addEventListener('input', () => {
+            let value = parseInt(counterInput.value) || 0;
+            if (value > 999999) value = 999999;
+            if (value < -99999) value = -99999;
+            counter = value;
+            counterInput.value = counter;
+            saveData();
+        });
+
+        // 保存標題
+        titleInput.addEventListener('input', saveData);
+
+        // 防止螢幕休眠
+        let wakeLock = null;
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                }
+            } catch (err) {
+                console.log('Wake Lock not supported');
+            }
+        }
+
+        // 頁面載入時初始化
+        loadData();
+        requestWakeLock();
+    </script>
+</body>
+</html>
